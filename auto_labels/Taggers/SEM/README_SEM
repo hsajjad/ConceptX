@@ -1,0 +1,48 @@
+#!/bin/bash -l
+#SBATCH -J SEM  #name of the job
+#SBATCH -o semOutput.txt
+#SBATCH -p gpu-all
+#SBATCH --gres gpu:1
+#SBATCH -c 4
+#SBATCH --mem 120000MB
+#output file
+#queue used
+#number of gpus needed
+#number of CPUs needed
+#amount of RAM needed
+module load cuda10.1/toolkit
+#conda activate NA
+conda activate /home/local/QCRI/ndurrani/anaconda3/envs/NA
+
+Task=SEM
+WORKDIR=/alt/mt/work/durrani/Taggers/NAACL-Code/Taggers/${Task}
+OUT_DIR2=${WORKDIR}/Decoding
+TRAINED=QCRI/bert-base-multilingual-cased-sem-english
+DATADIR=${WORKDIR}/Data
+INPUTFILE="test.word"
+MAX_LENGTH=512
+
+cp $INPUTFILE $DATADIR/xaa
+
+python prepareTestData.py -f "xaa"
+
+`rm output.{label,word}`
+for i in "xaa"	 # Bigger files need splits 
+do
+
+   `rm -rf cached_*`
+   `cp $i.tst test.txt`
+   python3 run_ner.py --data_dir $WORKDIR --labels ./labels.txt --model_name_or_path $TRAINED  --output_dir $OUT_DIR2 --max_seq_length $MAX_LENGTH --do_predict
+   `mkdir Decoding/$i`
+   `cp Decoding/*.txt Decoding/$i/`
+   `python exactLines.py -o $i -m $i.tst -l Decoding/$i/test_predictions.txt > Decoding/$i/predictions`
+    sed -i '$ d' Decoding/$i/predictions
+   `python changeToSent.py -f Decoding/$i/predictions -s 0 -l 1 | cut -f2 > Decoding/$i/label.txt`
+   `python changeToSent.py -f Decoding/$i/predictions -s 0 -l 1 | cut -f1 > Decoding/$i/word.txt`
+    `cat Decoding/$i/label.txt >> output.label`
+    `cat Decoding/$i/word.txt >> output.word`
+    `python createJson.py -f output.label -l SEM`
+
+done
+
+

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#First Word (FW)
+echo "First Word Annotation"
+python trivialLabels.py -j smallSet.json -l FirstWord
+
+#Last Word (LW)
+echo "Last Word Annotation"
+python trivialLabels.py -j smallSet.json -l LastWord
+
+#Casing (LC, UC, MC : Lower, Upper, Mixed Case)
+echo "Casing Annotation"
+python trivialLabels.py -j smallSet.json -l Casing
+
+#Suffixes
+echo "Suffix Annotation"
+python trivialLabels.py -j smallSet.json -l Suffix
+
+#Prefixes
+echo "Prefix Annotation"
+python trivialLabels.py -j smallSet.json -l Prefix
+
+#BPE
+echo "BPE Annotation"
+python getVocab.py -s bert-base-cased_vocab.json -m BERT > BERT.vocab
+python trivialLabels.py -j smallSet.json -l BPE -m BERT
+
