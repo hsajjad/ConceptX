@@ -4,7 +4,7 @@ Analyzing Latent Concept in Pre-trained Transformer Models
 The code has been split into three parts. 1) get concept clusters, 2) generate auto-labels data, 3) calculate the alignment between auto-labels and concepts.
 
 ## Get concept clusters
-getclusters.sh provides step-by-step commands to create concept clusters. You need to specify path to a sentence file.
+get_clusters/getclusters.sh provides step-by-step commands to create concept clusters. You need to specify path to a sentence file.
 
 ### Proprocessing
 This step invovles tokenizing the input sentences and extracting word-level contextualized embeddings. The setup requires setting up neurox environment using env_neurox.yml.

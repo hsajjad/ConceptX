@@ -1,7 +1,7 @@
 #!/bin/bash
 
-scriptDir=scripts/
-inputPath=data/ # path to a sentence file
+scriptDir=../scripts/
+inputPath=../data/ # path to a sentence file
 input=text.in #name of the sentence file
 # model name or path to a finetuned model
 model="bert-base-cased"
@@ -47,7 +47,7 @@ DATASETPATH=${working_file}_min_${minfreq}_max_${maxfreq}_del_${delfreq}-dataset
 VOCABFILE=processed-vocab.npy
 POINTFILE=processed-point.npy
 RESULTPATH=./results
-CLUSTERS=400,1200,200  #Comma separated for multiple values or three values to define a range
+CLUSTERS=50,100,50  #Comma separated for multiple values or three values to define a range
 # first number is number of clusters to start with, second is number of clusters to stop at and third one is the increment from the first value
 # 600 1000 200 means [600,800,1000] number of clusters
 		
