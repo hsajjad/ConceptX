@@ -1,4 +1,4 @@
-name: NA
+name: autolabels
 channels:
   - conda-forge
   - defaults
